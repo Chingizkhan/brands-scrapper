@@ -1,0 +1,26 @@
+version: "3.8"
+
+services:
+  products:
+    build:
+      context: ../project
+      dockerfile: product.Dockerfile
+    ports:
+      - "5050:5050"
+    volumes:
+      - ../project:/app
+    depends_on:
+      - products-postgres
+
+  products-postgres:
+    image: postgres:latest
+    environment:
+      POSTGRES_USER: app
+      POSTGRES_PASSWORD: secret
+      POSTGRES_DB: products
+    restart: always
+    volumes:
+      - products-postgres-db:/var/lib/postgresql/data
+
+volumes:
+  products-postgres-db:
